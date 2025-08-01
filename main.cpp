@@ -1,6 +1,8 @@
 #include <crow.h>
 #include <sqlite3.h>
 #include "include/api_verify.h"
+#include "include/short.h"
+#include "include/full.h"
 
 struct api_key:crow::ILocalMiddleware{
     struct context {};
@@ -28,9 +30,23 @@ int main(){
     bp.CROW_MIDDLEWARES(app,api_key);
 
     CROW_BP_ROUTE(bp,"/")([](){
-        return "Protected ROute";
+        return "Your Api Key Is Valid !";
     });
 
+    CROW_BP_ROUTE(bp,"/short/<string>")([](std::string url){
+        std::string shorted_url=shorten(url);
+        std::string final_string = std::string("Your New Url") + "<-->" + shorted_url;
+        return final_string;
+    });
+
+    CROW_BP_ROUTE(bp,"/full/<string>")([](std::string short_url){
+        std::string original_url=full_url(short_url);
+        return original_url;
+    });
+
+    CROW_ROUTE(app,"/")([](){
+        return "Public Route Of Short-It Please Refer To Docs For Usage Understanding!!";
+    });
     app.register_blueprint(bp);
 
     app.port(8080).multithreaded().run();
