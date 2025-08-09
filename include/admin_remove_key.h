@@ -12,7 +12,7 @@ bool remove_key(std::string username,std::string api_key){
         return false;
     
     }
-    const char* query="SELECT FROM admin_api_key WHERE username=? AND api_key=?";
+    const char* query="SELECT * FROM api_keys WHERE username=? AND api_key=?";
     sqlite3_stmt* final_statement=nullptr;
     exit=sqlite3_prepare_v2(db,query,-1,&final_statement,nullptr);
     if(exit!=SQLITE_OK){

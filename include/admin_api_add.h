@@ -44,7 +44,7 @@ std::string add_key(std::string username,std::string email_id,std::string descri
     CROW_LOG_INFO<<created_at;
     CROW_LOG_INFO<<"--------------------------";
 
-    const char* query="INSERT INTO admin_api_key (api_key, username, email, no_of_time, description, created_at) VALUES (?, ?, ?, ?, ?, ?);";
+    const char* query="INSERT INTO api_keys (api_key, username, email, no_of_time, description, created_at) VALUES (?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* final_statement=nullptr;
     exit=sqlite3_prepare_v2(db,query,-1,&final_statement,nullptr);
     if(exit!=SQLITE_OK){

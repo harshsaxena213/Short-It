@@ -84,13 +84,9 @@ int main(){
         return "Verified";
     });
 
-    CROW_BP_ROUTE(bp_admin,"/add_api_key").methods(crow::HTTPMethod::POST)([](crow::request& req,crow::response& res){
-        auto parameters=req.get_body_params();
+    CROW_BP_ROUTE(bp_admin,"/add_api_key/<string>/<string>/<string>/<string>")([](crow::request& req,crow::response& res,std::string username,std::string email_id,std::string description,std::string id){
         CROW_LOG_INFO<<"PAssed";
-        auto username=parameters.get("username");
-        auto email_id=parameters.get("email_id");
-        auto description=parameters.get("description");
-        auto id=parameters.get("id");
+
         CROW_LOG_INFO<<username,email_id,description,id;
         int id_int = std::stoi(id);
         CROW_LOG_INFO<<id<<"Converted";
@@ -100,10 +96,7 @@ int main(){
         res.end();
     });
 
-        CROW_BP_ROUTE(bp_admin,"/remove_api_key").methods(crow::HTTPMethod::POST)([](crow::request& req,crow::response& res){
-        auto parameters=req.get_body_params();
-        auto username=parameters.get("username");
-        auto api_key=parameters.get("api_key");
+        CROW_BP_ROUTE(bp_admin,"/remove_api_key/<string>/<string>")([](crow::request& req,crow::response& res,std::string api_key,std::string username){
         bool isDeleted=remove_key(username,api_key);
         if(isDeleted==true){
             res.code=200;
