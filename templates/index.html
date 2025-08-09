@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add API Key (Crow Admin)</title>
+</head>
+<body>
+  <h2>Add API Key (Admin Endpoint)</h2>
+  <form action="http://localhost:8081/admin/add_api_key" method="post">
+    <label>Username:</label>
+    <input type="text" name="username" required><br>
+    <label>Email:</label>
+    <input type="email" name="email_id" required><br>
+    <label>Description:</label>
+    <input type="text" name="description" required><br>
+    <label>ID:</label>
+    <input type="number" name="id" required><br><br>
+    <label>API-KEY:</label>
+    <input type="text" name="admin-api-key" required><br>
+    <input type="submit" value="Add API Key">
+  </form>
+  <p><b>Note:</b> This will <u>not</u> send 'admin-api-key' in the header. For that, use the JS version below.</p>
+    <script>
+    document.getElementById('apiForm').onsubmit = async function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new URLSearchParams();
+      for (const pair of new FormData(form)) {
+        if (pair[0] !== 'admin-api-key')
+          data.append(pair[0], pair[1]);
+      }
+      const adminApiKey = form['admin-api-key'].value;
+      const response = await fetch('http://localhost:8081/admin/add_api_key', {
+        method: 'POST',
+        headers: {
+          'admin-api-key': adminApiKey,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: data
+      });
+      document.getElementById('result').textContent = await response.text();
+    }
+  </script>
+</body>
+</html>
